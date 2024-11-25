@@ -1,0 +1,16 @@
+{
+  "name": "url",
+  "version": "1.0.0",
+  "description": "url-shortener/ ├── server.js         # Main server file ├── routes/ │   └── shorten.js    # URL shortening logic ├── utils/ │   └── hash.js       # Utility for hash/encoding └── package.json      # Project dependencies",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
