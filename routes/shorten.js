@@ -6,21 +6,25 @@ const router = express.Router();
 // In-memory mapping for runtime storage
 const urlMap = new Map();
 
-// Shorten a URL
-router.post("/", (req, res) => {
-  const { originalUrl } = req.body;
+const isValidUrl = (url) => {
+  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w\d]{2,}(\/.*)?$/;
+  return urlRegex.test(url);
+};
 
-  if (!originalUrl) {
-    return res.status(400).json({ error: "Original URL is required" });
+router.post("/", (req, res) => {
+  const { originalUrl, customAlias } = req.body;
+
+  if (!isValidUrl(originalUrl)) {
+    return res.status(400).json({ error: "Invalid URL format" });
   }
 
-  const hash = generateHash(originalUrl);
+  if (customAlias && urlMap.has(customAlias)) {
+    return res.status(400).json({ error: "Custom alias already exists" });
+  }
 
-  // Save mapping temporarily in memory
+  const hash = customAlias || generateHash(originalUrl);
   urlMap.set(hash, originalUrl);
-
-  const shortUrl = `http://localhost:3000/shorten/${hash}`;
-  res.json({ shortUrl });
+  res.json({ shortUrl: `http://localhost:3000/shorten/${hash}` });
 });
 
 // Redirect to original URL
